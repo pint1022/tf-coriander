@@ -4,7 +4,7 @@ set -e
 set -x
 
 git submodule update --init --recursive
-
+git submodule update --remote
 pushd third_party/coriander
 if [[ ! -d build ]]; then {
     mkdir build
