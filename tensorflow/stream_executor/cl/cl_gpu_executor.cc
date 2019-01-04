@@ -583,7 +583,7 @@ bool CLExecutor::SynchronousMemcpyDeviceToDevice(
 
 bool CLExecutor::MemZero(Stream *stream, DeviceMemoryBase *location,
                            uint64 size) {
-  std::cout << "cl_gpu_executor::MemZero() not implemented; NEED be fixed!!!!!" << std::endl;
+//  std::cout << "cl_gpu_executor::MemZero() not implemented; NEED be fixed!!!!!" << std::endl;
   return true;
 //  return false;
   // if (reinterpret_cast<uintptr_t>(location->opaque()) % 4 == 0 &&

@@ -189,17 +189,17 @@ class CudnnSupport : public dnn::DnnSupport {
       const dnn::AlgorithmConfig& algorithm_config,
       dnn::ProfileResult* output_profile_result) override;
 
-  bool DoConvolveBackwardData(
-      Stream* stream, const dnn::FilterDescriptor& filter_descriptor,
-      const DeviceMemory<Eigen::half>& filter_data,
-      const dnn::BatchDescriptor& output_descriptor,
-      DeviceMemory<Eigen::half> backward_output_data,
-      const dnn::ConvolutionDescriptor& convolution_descriptor,
-      const dnn::BatchDescriptor& input_descriptor,
-      DeviceMemory<Eigen::half>* backward_input_data,
-      ScratchAllocator* scratch_allocator,
-      const dnn::AlgorithmConfig& algorithm_config,
-      dnn::ProfileResult* output_profile_result) override;
+//   bool DoConvolveBackwardData(
+//       Stream* stream, const dnn::FilterDescriptor& filter_descriptor,
+//       const DeviceMemory<Eigen::half>& filter_data,
+//       const dnn::BatchDescriptor& output_descriptor,
+//       DeviceMemory<Eigen::half> backward_output_data,
+//       const dnn::ConvolutionDescriptor& convolution_descriptor,
+//       const dnn::BatchDescriptor& input_descriptor,
+//       DeviceMemory<Eigen::half>* backward_input_data,
+//       ScratchAllocator* scratch_allocator,
+//       const dnn::AlgorithmConfig& algorithm_config,
+//       dnn::ProfileResult* output_profile_result) override;
 
   bool DoConvolveBackwardFilter(
       Stream* stream, const dnn::BatchDescriptor& input_descriptor,
@@ -213,17 +213,17 @@ class CudnnSupport : public dnn::DnnSupport {
       const dnn::AlgorithmConfig& algorithm_config,
       dnn::ProfileResult* output_profile_result) override;
 
-  bool DoConvolveBackwardFilter(
-      Stream* stream, const dnn::BatchDescriptor& input_descriptor,
-      const DeviceMemory<Eigen::half>& input_data,
-      const dnn::BatchDescriptor& output_descriptor,
-      DeviceMemory<Eigen::half> backward_output_data,
-      const dnn::ConvolutionDescriptor& convolution_descriptor,
-      const dnn::FilterDescriptor& filter_descriptor,
-      DeviceMemory<Eigen::half>* backward_filter_data,
-      ScratchAllocator* scratch_allocator,
-      const dnn::AlgorithmConfig& algorithm_config,
-      dnn::ProfileResult* output_profile_result) override;
+//   bool DoConvolveBackwardFilter(
+//       Stream* stream, const dnn::BatchDescriptor& input_descriptor,
+//       const DeviceMemory<Eigen::half>& input_data,
+//       const dnn::BatchDescriptor& output_descriptor,
+//       DeviceMemory<Eigen::half> backward_output_data,
+//       const dnn::ConvolutionDescriptor& convolution_descriptor,
+//       const dnn::FilterDescriptor& filter_descriptor,
+//       DeviceMemory<Eigen::half>* backward_filter_data,
+//       ScratchAllocator* scratch_allocator,
+//       const dnn::AlgorithmConfig& algorithm_config,
+//       dnn::ProfileResult* output_profile_result) override;
 
   bool DoConvolveBackwardBias(
       Stream* stream, const dnn::BatchDescriptor& input_descriptor,

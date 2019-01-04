@@ -2964,7 +2964,7 @@ bool CudnnSupport::DoBiasAdd(Stream* stream,
     return false;
   }
 
-  const float alpha = 1.0f;
+  float alpha = 1.0f;
   const float beta = 1.0f;
 
 #if CUDNN_VERSION >= 5000

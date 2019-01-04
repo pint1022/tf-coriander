@@ -591,14 +591,14 @@ Stream &Stream::ThenConvolveBackwardDataWithAlgorithm(
 
   if (ok()) {
     if (dnn::DnnSupport *dnn = parent_->AsDnn()) {
-      auto status = dnn->DoConvolveBackwardData(
-          this, filter_descriptor, filter_data, output_descriptor,
-          backward_output_data, convolution_descriptor, input_descriptor,
-          backward_input_data, scratch_allocator, algorithm_config,
-          output_profile_result);
-      if (!status && !output_profile_result) {
-        SetError();
-      }
+      // auto status = dnn->DoConvolveBackwardData(
+      //     this, filter_descriptor, filter_data, output_descriptor,
+      //     backward_output_data, convolution_descriptor, input_descriptor,
+      //     backward_input_data, scratch_allocator, algorithm_config,
+      //     output_profile_result);
+      // if (!status && !output_profile_result) {
+      //   SetError();
+      // }
     } else {
       SetError();
       LOG(WARNING)
@@ -625,11 +625,11 @@ Stream &Stream::ThenConvolveBackwardDataWithScratch(
 
   if (ok()) {
     if (dnn::DnnSupport *dnn = parent_->AsDnn()) {
-      CheckError(dnn->DoConvolveBackwardData(
-          this, filter_descriptor, filter_data, output_descriptor,
-          backward_output_data, convolution_descriptor, input_descriptor,
-          backward_input_data, scratch_allocator, dnn::AlgorithmConfig(),
-          nullptr));
+      // CheckError(dnn->DoConvolveBackwardData(
+      //     this, filter_descriptor, filter_data, output_descriptor,
+      //     backward_output_data, convolution_descriptor, input_descriptor,
+      //     backward_input_data, scratch_allocator, dnn::AlgorithmConfig(),
+      //     nullptr));
     } else {
       SetError();
       LOG(WARNING)
@@ -737,11 +737,11 @@ Stream &Stream::ThenConvolveBackwardFilterWithScratch(
 
   if (ok()) {
     if (dnn::DnnSupport *dnn = parent_->AsDnn()) {
-      CheckError(dnn->DoConvolveBackwardFilter(
-          this, input_descriptor, input_data, output_descriptor,
-          backward_output_data, convolution_descriptor, filter_descriptor,
-          backward_filter_data, scratch_allocator, dnn::AlgorithmConfig(),
-          nullptr));
+      // CheckError(dnn->DoConvolveBackwardFilter(
+      //     this, input_descriptor, input_data, output_descriptor,
+      //     backward_output_data, convolution_descriptor, filter_descriptor,
+      //     backward_filter_data, scratch_allocator, dnn::AlgorithmConfig(),
+      //     nullptr));
     } else {
       SetError();
       LOG(WARNING)
@@ -770,14 +770,14 @@ Stream &Stream::ThenConvolveBackwardFilterWithAlgorithm(
 
   if (ok()) {
     if (dnn::DnnSupport *dnn = parent_->AsDnn()) {
-      auto status = dnn->DoConvolveBackwardFilter(
-          this, input_descriptor, input_data, output_descriptor,
-          backward_output_data, convolution_descriptor, filter_descriptor,
-          backward_filter_data, scratch_allocator, algorithm_config,
-          output_profile_result);
-      if (!status && !output_profile_result) {
-        SetError();
-      }
+      // auto status = dnn->DoConvolveBackwardFilter(
+      //     this, input_descriptor, input_data, output_descriptor,
+      //     backward_output_data, convolution_descriptor, filter_descriptor,
+      //     backward_filter_data, scratch_allocator, algorithm_config,
+      //     output_profile_result);
+      // if (!status && !output_profile_result) {
+      //   SetError();
+      // }
     } else {
       SetError();
       LOG(WARNING)
@@ -826,14 +826,14 @@ Stream &Stream::ThenConvolveBackwardBiasImpl(
   return *this;
 }
 
-Stream &Stream::ThenConvolveBackwardBias(
-    const dnn::BatchDescriptor &input_descriptor,
-    const DeviceMemory<double> &input_data,
-    const dnn::BatchDescriptor &bias_descriptor,
-    DeviceMemory<double> *backward_bias_data) {
-  return ThenConvolveBackwardBiasImpl(input_descriptor, input_data,
-                                      bias_descriptor, backward_bias_data);
-}
+// Stream &Stream::ThenConvolveBackwardBias(
+//     const dnn::BatchDescriptor &input_descriptor,
+//     const DeviceMemory<double> &input_data,
+//     const dnn::BatchDescriptor &bias_descriptor,
+//     DeviceMemory<double> *backward_bias_data) {
+//   return ThenConvolveBackwardBiasImpl(input_descriptor, input_data,
+//                                       bias_descriptor, backward_bias_data);
+// }
 
 Stream &Stream::ThenConvolveBackwardBias(
     const dnn::BatchDescriptor &input_descriptor,
@@ -844,14 +844,14 @@ Stream &Stream::ThenConvolveBackwardBias(
                                       bias_descriptor, backward_bias_data);
 }
 
-Stream &Stream::ThenConvolveBackwardBias(
-    const dnn::BatchDescriptor &input_descriptor,
-    const DeviceMemory<Eigen::half> &input_data,
-    const dnn::BatchDescriptor &bias_descriptor,
-    DeviceMemory<Eigen::half> *backward_bias_data) {
-  return ThenConvolveBackwardBiasImpl(input_descriptor, input_data,
-                                      bias_descriptor, backward_bias_data);
-}
+// Stream &Stream::ThenConvolveBackwardBias(
+//     const dnn::BatchDescriptor &input_descriptor,
+//     const DeviceMemory<Eigen::half> &input_data,
+//     const dnn::BatchDescriptor &bias_descriptor,
+//     DeviceMemory<Eigen::half> *backward_bias_data) {
+//   return ThenConvolveBackwardBiasImpl(input_descriptor, input_data,
+//                                       bias_descriptor, backward_bias_data);
+// }
 
 Stream &Stream::ThenMatMul(const DeviceMemory<float> &input_data,
                            const DeviceMemory<float> &weights,

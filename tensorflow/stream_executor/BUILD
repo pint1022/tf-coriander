@@ -40,6 +40,7 @@ cc_library(
         '-lclblast',
         '-leasycl',
         '-lclew',
+        # '-lcorianderdnn',
     ],
     visibility = ["//visibility:public"],
     deps = [

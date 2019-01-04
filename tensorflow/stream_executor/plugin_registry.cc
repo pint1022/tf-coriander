@@ -248,12 +248,17 @@ EMIT_PLUGIN_SPECIALIZATIONS(RngFactory, rng, "RNG");
 // (or theres probably a way that doesnt require compilation first I would think :-) )
 namespace perftools {
   namespace gputools {
+    void initialize_cudnn();
     void initialize_clblas();
     void InitializeClPlatform();
     void initialize_cl_gpu_executor();
   }
 }
 #include "tensorflow/stream_executor/lib/initialize.h"
+
+REGISTER_MODULE_INITIALIZER(register_cudnn,
+                             { perftools::gputools::initialize_cudnn(); });
+
 REGISTER_MODULE_INITIALIZER(register_clblas,
                             { perftools::gputools::initialize_clblas(); });
 REGISTER_MODULE_INITIALIZER(cl_platform,
