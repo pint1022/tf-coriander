@@ -582,10 +582,10 @@ void LaunchConv2DOp<GPUDevice, T>::launch(
 
   // Convert the output tensor back from NHWC to NCHW.
   if (data_format == FORMAT_NHWC) {
-    functor::NCHWToNHWC<GPUDevice, T, 4>()(
-        ctx->eigen_device<GPUDevice>(),
-        const_cast<const Tensor&>(transformed_output).tensor<T, 4>(),
-        output->tensor<T, 4>());
+//    functor::NCHWToNHWC<GPUDevice, T, 4>()(
+//        ctx->eigen_device<GPUDevice>(),
+//        const_cast<const Tensor&>(transformed_output).tensor<T, 4>(),
+//        output->tensor<T, 4>());
   } else {
     *output = transformed_output;
   }

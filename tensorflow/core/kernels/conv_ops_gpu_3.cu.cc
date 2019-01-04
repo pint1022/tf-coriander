@@ -174,6 +174,55 @@ __global__ void SwapDimension1And2InTensor3(int nthreads, const T* input,
   }
 }
 
+//template <typename T, int TileSize>
+//__global__ void test(const T* input,
+//                    Dimension<3> input_dims,
+//					T* output) {
+//  // One extra line in the inner dimension to avoid share memory bank conflict.
+//  __shared__ T sharedV[TileSize][TileSize+1];
+//  int x = threadIdx.x;
+//  if (x >= TileSize) {
+//    return;
+//  }
+//
+//  Dimension<3> output_dims = {
+//      input_dims[0], input_dims[2], input_dims[1],
+//  };
+//
+//  Dimension<3> input_dims_in_tiles = {
+//      input_dims[0], (input_dims[1] + TileSize - 1) / TileSize,
+//      (input_dims[2] + TileSize - 1) / TileSize,
+//  };
+//
+//  Index<3> input_tile_index =
+//      FlatToTensorIndex(blockIdx.x, input_dims_in_tiles);
+//
+//  Index<3> input_tile_origin = {
+//      input_tile_index[0], input_tile_index[1] * TileSize,
+//      input_tile_index[2] * TileSize,
+//  };
+//
+//  int input_origin_flat_index =
+//      TensorIndexToFlat(input_tile_origin, input_dims);
+//
+//  int tile_width = TileSize;
+//  // Only the last row or column may not have the full size.
+//  if (input_tile_index[2] == input_dims_in_tiles[2] - 1) {
+//    tile_width = input_dims[2] - (input_dims_in_tiles[2] - 1) * TileSize;
+//  }
+//  int tile_height = TileSize;
+//  if (input_tile_index[1] == input_dims_in_tiles[1] - 1) {
+//    tile_height = input_dims[1] - (input_dims_in_tiles[1] - 1) * TileSize;
+//  }
+//  if (x < tile_width) {
+//    int input_flat_index = input_origin_flat_index + x;
+//    for (int y = 0; y < tile_height; y++) {
+//    	sharedV[y][x] = input[input_flat_index];
+//      input_flat_index += input_dims[2];
+//    }
+//  }
+//}
+
 // Use shared memory tiles to swap dimension-1 and dimension-2 of a 3D tensor,
 // where dimensions are zero-based: output[i][j][k] = input[i][k][j].
 // TileSize could be arbitrary. But for best performance, it is better to be
@@ -417,6 +466,9 @@ void RunSwapDimension1And2InTensor3(const GPUDevice& d, const T* input,
     };
     int total_tiles_count = input_dims_in_tiles[0] * input_dims_in_tiles[1] *
                             input_dims_in_tiles[2];
+//    test<T, TileSize><<<total_tiles_count, TileSize, 0, d.stream()>>>(
+//        input,input_dims, output);
+
     SwapDimension1And2InTensor3UsingTiles<
         T, TileSize><<<total_tiles_count, TileSize, 0, d.stream()>>>(
         input, input_dims, output);
