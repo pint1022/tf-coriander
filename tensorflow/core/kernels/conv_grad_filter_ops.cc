@@ -40,10 +40,10 @@ limitations under the License.
 #include "tensorflow/core/util/use_cudnn.h"
 #include "tensorflow/core/util/work_sharder.h"
 
-#if GOOGLE_CUDA
+// #if GOOGLE_CUDA
 #include "tensorflow/core/kernels/conv_ops_gpu.h"
 #include "tensorflow/core/platform/stream_executor.h"
-#endif  // GOOGLE_CUDA
+// #endif  // GOOGLE_CUDA
 
 namespace {
 
@@ -339,7 +339,7 @@ TF_CALL_float(REGISTER_CPU_KERNELS);
 #undef REGISTER_CPU_KERNELS
 
 // GPU definitions.
-#if GOOGLE_CUDA
+// #if GOOGLE_CUDA
 // The slow version (but compiles for GPU)
 
 // Backprop for filter.
@@ -625,13 +625,13 @@ class Conv2DSlowBackpropFilterOp : public OpKernel {
                 .ok();
         if (cudnn_launch_status) {
           if (profile_result.is_valid()) {
-            if (profile_result.elapsed_time_in_ms() <
-                best_result.elapsed_time_in_ms()) {
+              if ((profile_result.elapsed_time_in_ms() <
+                  best_result.elapsed_time_in_ms()) || (algorithms.size()==1)) {
               best_result = profile_result;
-            }
-            if (scratch_allocator.TotalByteSize() == 0 &&
-                profile_result.elapsed_time_in_ms() <
-                    best_result_no_scratch.elapsed_time_in_ms()) {
+//            }
+//            if (scratch_allocator.TotalByteSize() == 0 &&
+//                profile_result.elapsed_time_in_ms() <
+//                    best_result_no_scratch.elapsed_time_in_ms()) {
               best_result_no_scratch = profile_result;
             }
           }
@@ -738,6 +738,6 @@ REGISTER_KERNEL_BUILDER(Name("Conv2DBackpropFilter")
 //                             .TypeConstraint<Eigen::half>("T")
 //                             .HostMemory("filter_sizes"),
 //                         Conv2DSlowBackpropFilterOp<GPUDevice, Eigen::half>);
-#endif  // GOOGLE_CUDA
+// #endif  // GOOGLE_CUDA
 
 }  // namespace tensorflow

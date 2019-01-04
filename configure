@@ -12,10 +12,10 @@ SOURCE_BASE_DIR=`pwd -P`
 popd > /dev/null
 
 function bazel_clean_and_fetch() {
-  bazel clean --expunge
+  TEST_TMPDIR=/tmp/bazel/ bazel clean --expunge
   # bazel fetch //tensorflow/...
   # from https://github.com/tensorflow/tensorflow/pull/6225/files
-  bazel fetch $(bazel query "//tensorflow/... -//tensorflow/examples/android/...")
+  TEST_TMPDIR=/tmp/bazel/ bazel fetch $(TEST_TMPDIR=/tmp/bazel/ bazel query "//tensorflow/... -//tensorflow/examples/android/...")
 }
 
 ## Set up python-related environment settings

@@ -1573,16 +1573,16 @@ tf_kernel_library(
     ],
     prefix = "conv_ops",
     deps = [
-        ":bounds_check",
+#        ":bounds_check",
         ":conv_2d",
         ":conv_3d",
         ":image_resizer_state",
         ":ops_util",
-        "//tensorflow/core:core_cpu",
-        "//tensorflow/core:framework",
-        "//tensorflow/core:lib",
-        "//tensorflow/core:nn_ops_op_lib",
-    ],
+#        "//tensorflow/core:core_cpu",
+#        "//tensorflow/core:framework",
+#        "//tensorflow/core:lib",
+#        "//tensorflow/core:nn_ops_op_lib",
+    ] + MATH_DEPS,
 )
 
 tf_kernel_library(

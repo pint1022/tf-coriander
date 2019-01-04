@@ -25,10 +25,11 @@ limitations under the License.
 
 #include <iostream>
 
+// #include "cuda.h"
 namespace perftools {
 namespace gputools {
 namespace cl {
-
+// class CLStream;
 class CLExecutor;
 
 // Wraps a CUstream in order to satisfy the platform-independent

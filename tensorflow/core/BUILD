@@ -375,6 +375,7 @@ tf_gen_op_libs(
         "state_ops",
         "string_ops",
         "training_ops",
+        "conv_ops",
     ],
 )
 
@@ -535,6 +536,7 @@ cc_library(
         "//tensorflow/core/kernels:state",
         "//tensorflow/core/kernels:string",
         "//tensorflow/core/kernels:training_ops",
+        "//tensorflow/core/kernels:conv_ops",
         "//tensorflow/models/embedding:word2vec_kernels",
     ] + if_not_windows([
         "//tensorflow/core/kernels:fact_op",

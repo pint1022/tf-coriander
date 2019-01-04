@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#if GOOGLE_CUDA
+// #if GOOGLE_CUDA
 
 #define EIGEN_USE_GPU
 
@@ -205,7 +205,9 @@ void BiasGradGPU<T>::compute(const GPUDevice& d, const T* output_backprop,
     shared_memory_size = bias_size * sizeof(typename AccumulatorType<T>::type);
   }
   // Check if we have enough shared memory.
-  if (shared_memory_size <= max_shared_memory_size) {
+
+//  if (shared_memory_size <= max_shared_memory_size) {
+  if (shared_memory_size < 0) {
     if (data_format == FORMAT_NHWC) {
       BiasGradNHWC_SharedAtomics<
           T><<<config.block_count, config.thread_per_block, shared_memory_size,
@@ -247,4 +249,4 @@ TF_CALL_GPU_NUMBER_TYPES(DEFINE_GPU_SPECS);
 
 }  // end namespace tensorflow
 
-#endif  // GOOGLE_CUDA
+// #endif  // GOOGLE_CUDA

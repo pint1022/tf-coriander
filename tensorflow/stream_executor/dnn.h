@@ -989,17 +989,17 @@ class DnnSupport {
   virtual bool GetConvolveBackwardDataAlgorithms(
       std::vector<AlgorithmType>* out_algorithms);
 
-  virtual bool DoConvolveBackwardData(
-      Stream* stream, const FilterDescriptor& filter_descriptor,
-      const DeviceMemory<Eigen::half>& filter_data,
-      const BatchDescriptor& output_descriptor,
-      DeviceMemory<Eigen::half> backward_output_data,
-      const ConvolutionDescriptor& convolution_descriptor,
-      const BatchDescriptor& input_descriptor,
-      DeviceMemory<Eigen::half>* backward_input_data,
-      ScratchAllocator* scratch_allocator,
-      const dnn::AlgorithmConfig& algorithm_config,
-      ProfileResult* output_profile_result) = 0;
+  // virtual bool DoConvolveBackwardData(
+  //     Stream* stream, const FilterDescriptor& filter_descriptor,
+  //     const DeviceMemory<Eigen::half>& filter_data,
+  //     const BatchDescriptor& output_descriptor,
+  //     DeviceMemory<Eigen::half> backward_output_data,
+  //     const ConvolutionDescriptor& convolution_descriptor,
+  //     const BatchDescriptor& input_descriptor,
+  //     DeviceMemory<Eigen::half>* backward_input_data,
+  //     ScratchAllocator* scratch_allocator,
+  //     const dnn::AlgorithmConfig& algorithm_config,
+  //     ProfileResult* output_profile_result) = 0;
 
   // Enqueues a single-precision backward convolution (for filter) operation
   // onto the stream.
@@ -1037,17 +1037,17 @@ class DnnSupport {
   virtual bool GetConvolveBackwardFilterAlgorithms(
       std::vector<AlgorithmType>* out_algorithms);
 
-  virtual bool DoConvolveBackwardFilter(
-      Stream* stream, const BatchDescriptor& input_descriptor,
-      const DeviceMemory<Eigen::half>& input_data,
-      const BatchDescriptor& output_descriptor,
-      DeviceMemory<Eigen::half> backward_output_data,
-      const ConvolutionDescriptor& convolution_descriptor,
-      const FilterDescriptor& filter_descriptor,
-      DeviceMemory<Eigen::half>* backward_filter_data,
-      ScratchAllocator* scratch_allocator,
-      const dnn::AlgorithmConfig& algorithm_config,
-      ProfileResult* output_profile_result) = 0;
+  // virtual bool DoConvolveBackwardFilter(
+  //     Stream* stream, const BatchDescriptor& input_descriptor,
+  //     const DeviceMemory<Eigen::half>& input_data,
+  //     const BatchDescriptor& output_descriptor,
+  //     DeviceMemory<Eigen::half> backward_output_data,
+  //     const ConvolutionDescriptor& convolution_descriptor,
+  //     const FilterDescriptor& filter_descriptor,
+  //     DeviceMemory<Eigen::half>* backward_filter_data,
+  //     ScratchAllocator* scratch_allocator,
+  //     const dnn::AlgorithmConfig& algorithm_config,
+  //     ProfileResult* output_profile_result) = 0;
 
   // Enqueues a single-precision backward convolution (for bias) operation onto
   // the stream.
@@ -1070,21 +1070,21 @@ class DnnSupport {
     return false;
   }
 
-  virtual bool DoConvolveBackwardBias(
-      Stream* stream, const BatchDescriptor& input_descriptor,
-      const DeviceMemory<double>& input_data,
-      const BatchDescriptor& bias_descriptor,
-      DeviceMemory<double>* backward_bias_data) {
-    return false;
-  }
+  // virtual bool DoConvolveBackwardBias(
+  //     Stream* stream, const BatchDescriptor& input_descriptor,
+  //     const DeviceMemory<double>& input_data,
+  //     const BatchDescriptor& bias_descriptor,
+  //     DeviceMemory<double>* backward_bias_data) {
+  //   return false;
+  // }
 
-  virtual bool DoConvolveBackwardBias(
-      Stream* stream, const BatchDescriptor& input_descriptor,
-      const DeviceMemory<Eigen::half>& input_data,
-      const BatchDescriptor& bias_descriptor,
-      DeviceMemory<Eigen::half>* backward_bias_data) {
-    return false;
-  }
+  // virtual bool DoConvolveBackwardBias(
+  //     Stream* stream, const BatchDescriptor& input_descriptor,
+  //     const DeviceMemory<Eigen::half>& input_data,
+  //     const BatchDescriptor& bias_descriptor,
+  //     DeviceMemory<Eigen::half>* backward_bias_data) {
+  //   return false;
+  // }
 
   // Fully connects the "nodes" (float values) in input_data with
   // shape input_dimensions to output_data with output_dimensions

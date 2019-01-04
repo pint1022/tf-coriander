@@ -13,7 +13,7 @@
 set -e
 set -x
 
-. env3/bin/activate
+. ~/conda3/bin/activate
 CLANG_HOME=$PWD/soft/llvm-4.0 util/build_coriander.sh
 util/run_configure.sh
 util/build_tf.sh

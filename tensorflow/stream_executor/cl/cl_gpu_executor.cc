@@ -583,8 +583,9 @@ bool CLExecutor::SynchronousMemcpyDeviceToDevice(
 
 bool CLExecutor::MemZero(Stream *stream, DeviceMemoryBase *location,
                            uint64 size) {
-  std::cout << "cl_gpu_executor::MemZero()" << std::endl;
-  return false;
+  std::cout << "cl_gpu_executor::MemZero() not implemented; NEED be fixed!!!!!" << std::endl;
+  return true;
+//  return false;
   // if (reinterpret_cast<uintptr_t>(location->opaque()) % 4 == 0 &&
   //     size % 4 == 0) {
   //   return Memset32(stream, location, 0x0, size);
@@ -677,13 +678,13 @@ port::Status CLExecutor::DeallocateEvent(Event *event) {
 
 port::Status CLExecutor::RecordEvent(Stream *stream, Event *event) {
   // std::cout << "cl_gpu_executor::RecordEvent()" << std::endl;
- return AsCLEvent(event)->Record(AsCLStream(stream));
+ return AsCLEvent(event)->Record((CLStream*)AsCLStream(stream));
 }
 
 port::Status CLExecutor::WaitForEvent(Stream *stream, Event *event) {
   // std::cout << "cl_gpu_executor::WaitForEvent()" << std::endl;
   if (CLDriver::WaitStreamOnEvent(context_,
-                                    AsCLStream(stream)->cl_stream(),
+                                    ((CLStream*)AsCLStream(stream))->cl_stream(),
                                     AsCLEvent(event)->cl_event())) {
     return port::Status::OK();
   } else {
@@ -701,12 +702,12 @@ Event::Status CLExecutor::PollForEventStatus(Event *event) {
 
 bool CLExecutor::AllocateStream(Stream *stream) {
   // std::cout << "cl_gpu_executor::AllocateStream()" << std::endl;
-  return AsCLStream(stream)->Init();
+  return ((CLStream*)AsCLStream(stream))->Init();
 }
 
 void CLExecutor::DeallocateStream(Stream *stream) {
   // std::cout << "cl_gpu_executor::DeallocateStream()" << std::endl;
-  CLStream *cl_stream = AsCLStream(stream);
+  CLStream *cl_stream = (CLStream*)AsCLStream(stream);
   if (!cl_stream->IsIdle()) {
     LOG(ERROR) << "Deallocating stream with pending work";
   }
@@ -726,10 +727,9 @@ void CLExecutor::DeallocateTimer(Timer *timer) {
 
 bool CLExecutor::CreateStreamDependency(Stream *dependent, Stream *other) {
   // std::cout << "cl_gpu_executor::CreateStreamDependency()" << std::endl;
-  CUevent other_completed_event = *AsCLStream(other)->completed_event();
+  CUevent other_completed_event = *((CLStream *)AsCLStream(other))->completed_event();
   bool ok = CLDriver::RecordEvent(context_, other_completed_event,
-                                    AsCLStreamValue(other))
-      .ok();
+                                    AsCLStreamValue(other)).ok();
   if (!ok) {
     LOG(ERROR) << "failed to record completion event; "
                   "therefore, failed to create inter-stream dependency";
@@ -759,7 +759,7 @@ bool CLExecutor::BlockHostUntilDone(Stream *stream) {
 }
 
 blas::BlasSupport *CLExecutor::CreateBlas() {
-  // std::cout << "cl_gpu_executor::CreateBlas()" << std::endl;
+  std::cout << "cl_gpu_executor::CreateBlas()" << std::endl;
   PluginRegistry *registry = PluginRegistry::Instance();
   port::StatusOr<PluginRegistry::BlasFactory> status =
       registry->GetFactory<PluginRegistry::BlasFactory>(kClPlatformId,
@@ -775,33 +775,33 @@ blas::BlasSupport *CLExecutor::CreateBlas() {
 }
 
 dnn::DnnSupport *CLExecutor::CreateDnn() {
-  std::cout << "cl_gpu_executor::Creatednn()" << std::endl;
-  // PluginRegistry *registry = PluginRegistry::Instance();
-  // port::StatusOr<PluginRegistry::DnnFactory> status =
-  //     registry->GetFactory<PluginRegistry::DnnFactory>(kClPlatformId,
-  //                                                      plugin_config_.dnn());
-  // if (!status.ok()) {
-  //   LOG(ERROR) << "Unable to retrieve DNN factory: "
-  //              << status.status().error_message();
+  std::cout << "cl_gpu_executor::CreateDnn()" << std::endl;
+  PluginRegistry *registry = PluginRegistry::Instance();
+  port::StatusOr<PluginRegistry::DnnFactory> status =
+      registry->GetFactory<PluginRegistry::DnnFactory>(kClPlatformId,
+                                                       plugin_config_.dnn());
+  if (!status.ok()) {
+    LOG(ERROR) << "Unable to retrieve DNN factory: "
+               << status.status().error_message();
     return nullptr;
-  // }
+  }
 
-  // return status.ValueOrDie()(this);
+  return status.ValueOrDie()(this);
 }
 
 fft::FftSupport *CLExecutor::CreateFft() {
   std::cout << "cl_gpu_executor::CreateFft()" << std::endl;
-  // PluginRegistry *registry = PluginRegistry::Instance();
-  // port::StatusOr<PluginRegistry::FftFactory> status =
-  //     registry->GetFactory<PluginRegistry::FftFactory>(kClPlatformId,
-  //                                                      plugin_config_.fft());
-  // if (!status.ok()) {
-  //   LOG(ERROR) << "Unable to retrieve FFT factory: "
-  //              << status.status().error_message();
+  PluginRegistry *registry = PluginRegistry::Instance();
+  port::StatusOr<PluginRegistry::FftFactory> status =
+      registry->GetFactory<PluginRegistry::FftFactory>(kClPlatformId,
+                                                       plugin_config_.fft());
+  if (!status.ok()) {
+    LOG(ERROR) << "Unable to retrieve FFT factory: "
+               << status.status().error_message();
     return nullptr;
-  // }
+  }
 
-  // return status.ValueOrDie()(this);
+  return status.ValueOrDie()(this);
 }
 
 rng::RngSupport *CLExecutor::CreateRng() {

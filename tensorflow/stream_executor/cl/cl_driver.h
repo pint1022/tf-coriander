@@ -19,7 +19,7 @@ limitations under the License.
 #define TENSORFLOW_STREAM_EXECUTOR_CL_CL_DRIVER_H_
 
 #include "cuda.h"
-
+#include "cl_stream.h"
 #include <stddef.h>
 #include "tensorflow/stream_executor/platform/port.h"
 
@@ -71,7 +71,7 @@ class CLDriver {
   static port::StatusOr<CUdevice> DeviceFromContext(ClContext* context);
 
   // Creates a new CL stream associated with the given context via
-  // cuStreamCreate.
+  // CUstreamCreate.
   // stream is an outparam owned by the caller, must not be null.
   // http://docs.nvidia.com/cl/cl-driver-api/group__CL__STREAM.html#group__CL__STREAM_1ga581f0c5833e21ded8b5a56594e243f4
   static bool CreateStream(ClContext* context, CUstream *stream);
@@ -290,13 +290,13 @@ class CLDriver {
                                 StreamCallback callback, void *data);
 
   // Causes stream to wait for event to trigger before proceeding via
-  // cuStreamWaitEvent.
+  // CUstreamWaitEvent.
   // http://docs.nvidia.com/cl/cl-driver-api/group__CL__STREAM.html#axzz334nAXAhM
   static bool WaitStreamOnEvent(ClContext* context, CUstream stream,
                                 CUevent event);
 
   // Blocks the calling thread until the operations enqueued onto stream have
-  // been completed, via cuStreamSynchronize.
+  // been completed, via CUstreamSynchronize.
   //
   // TODO(leary) if a pathological thread enqueues operations onto the stream
   // while another thread blocks like this, can you wind up waiting an unbounded

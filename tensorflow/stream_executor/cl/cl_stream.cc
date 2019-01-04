@@ -12,9 +12,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
-
-#include "cuda.h"
-
 #include "tensorflow/stream_executor/cl/cl_stream.h"
 
 #include "tensorflow/stream_executor/cl/cl_gpu_executor.h"
@@ -60,13 +57,13 @@ bool CLStream::IsIdle() const {
 }
 
 CLStream *AsCLStream(Stream *stream) {
-  // std::cout << "CLStream::AsCLStream()" << std::endl;
+//  std::cout << "CLStream::AsCLStream()" << std::endl;
   DCHECK(stream != nullptr);
   return static_cast<CLStream *>(stream->implementation());
 }
 
 CUstream AsCLStreamValue(Stream *stream) {
-  // std::cout << "CLStream::AsCLStreamValue()" << std::endl;
+  // std::cout << "CUstream::AsCLStreamValue()" << std::endl;
   DCHECK(stream != nullptr);
   return AsCLStream(stream)->cl_stream();
 }

@@ -35,19 +35,12 @@ if [[ ! -d llvm-4.0 ]]; then {
 
 set +e
 bazelversion=none
-bazelversion=$(bazel --batch version | grep 'Build label')
+bazelversion=$(TEST_TMPDIR=/tmp/bazel/ bazel --batch version | grep 'Build label')
 set -e
 
-if [[ ${bazelversion} != 'Build label: 0.4.5' ]]; then {
-    wget https://github.com/bazelbuild/bazel/releases/download/0.4.5/bazel_0.4.5-linux-x86_64.deb -O bazel_0.4.5-linux-x86_64.deb
-    ${SUDO} dpkg -i bazel_0.4.5-linux-x86_64.deb
-} fi
 
 popd
 
-if [[ ! -d env3 ]]; then {
-    python3 -m virtualenv -p python3 env3
-} fi
 
-. env3/bin/activate
+. ~/conda3/bin/activate
 pip install -r util/requirements.txt

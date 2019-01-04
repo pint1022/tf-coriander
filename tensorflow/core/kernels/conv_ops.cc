@@ -42,10 +42,10 @@ limitations under the License.
 #include "tensorflow/core/util/tensor_format.h"
 #include "tensorflow/core/util/use_cudnn.h"
 
-#if GOOGLE_CUDA
+// #if GOOGLE_CUDA
 #include "tensorflow/core/kernels/conv_ops_gpu.h"
 #include "tensorflow/core/platform/stream_executor.h"
-#endif  // GOOGLE_CUDA
+// #endif  // GOOGLE_CUDA
 
 namespace tensorflow {
 
@@ -313,7 +313,7 @@ TF_CALL_float(REGISTER_CPU);
 // To be used inside depthwise_conv_op.cc.
 template class LaunchConv2DOp<CPUDevice, float>;
 
-#if GOOGLE_CUDA
+// #if GOOGLE_CUDA
 int64 GetCudnnWorkspaceLimit(const string& envvar_in_mb,
                              int64 default_value_in_bytes) {
   const char* workspace_limit_in_mb_str = getenv(envvar_in_mb.c_str());
@@ -540,13 +540,13 @@ void LaunchConv2DOp<GPUDevice, T>::launch(
               .ok();
       if (cudnn_launch_status) {
         if (profile_result.is_valid()) {
-          if (profile_result.elapsed_time_in_ms() <
-              best_result.elapsed_time_in_ms()) {
+          if ((profile_result.elapsed_time_in_ms() <
+              best_result.elapsed_time_in_ms()) || (algorithms.size()==1)) {
             best_result = profile_result;
-          }
-          if (scratch_allocator.TotalByteSize() == 0 &&
-              profile_result.elapsed_time_in_ms() <
-                  best_result_no_scratch.elapsed_time_in_ms()) {
+//          }
+//          if (scratch_allocator.TotalByteSize() == 0 &&
+//              (profile_result.elapsed_time_in_ms() <
+//                  best_result_no_scratch.elapsed_time_in_ms() || (algorithms.size()==1))) {
             best_result_no_scratch = profile_result;
           }
         }
@@ -637,6 +637,6 @@ REGISTER_KERNEL_BUILDER(
 // To be used inside depthwise_conv_op.cc.
 template class LaunchConv2DOp<GPUDevice, float>;
 
-#endif  // GOOGLE_CUDA
+// #endif  // GOOGLE_CUDA
 
 }  // namespace tensorflow
