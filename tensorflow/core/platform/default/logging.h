@@ -41,6 +41,8 @@ class LogMessage : public std::basic_ostringstream<char> {
   LogMessage(const char* fname, int line, int severity);
   ~LogMessage();
 
+  static int64 MinVLogLevel();
+
  protected:
   void GenerateLogMessage();
 
@@ -70,7 +72,14 @@ class LogMessageFatal : public LogMessage {
 #define LOG(severity) _TF_LOG_##severity
 
 // TODO(jeff): Define a proper implementation of VLOG_IS_ON
+#ifdef IS_MOBILE_PLATFORM
 #define VLOG_IS_ON(lvl) ((lvl) <= 0)
+#else
+// Otherwise, Set TF_CPP_MIN_VLOG_LEVEL environment to update minimum log level
+// of VLOG
+#define VLOG_IS_ON(lvl) \
+  ((lvl) <= ::tensorflow::internal::LogMessage::MinVLogLevel())
+#endif
 
 #define VLOG(lvl)      \
   if (VLOG_IS_ON(lvl)) \

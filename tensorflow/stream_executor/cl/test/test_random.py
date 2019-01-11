@@ -4,6 +4,7 @@ import numpy as np
 import pytest
 import sys
 from tensorflow.python.ops import array_ops
+from tensorflow.python.client import timeline
 
 
 shapes = [
@@ -28,8 +29,11 @@ def _test_random_func(func_name, shape):
             W_t = tf.Variable(func(shape, seed=seed))
 
             with tf.Session(config=tf.ConfigProto(log_device_placement=False)) as sess:
-                sess.run(tf.initialize_all_variables())
-                W_gpu = sess.run(W_t)
+                run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
+                run_metadata = tf.RunMetadata()
+
+                sess.run(tf.initialize_all_variables(), options=run_options, run_metadata=run_metadata)
+                W_gpu = sess.run(W_t, options=run_options, run_metadata=run_metadata)
             if np.prod(np.array(shape)) < 20:
                 print('W_cpu', W_cpu)
                 print('W_gpu', W_gpu)
@@ -37,6 +41,11 @@ def _test_random_func(func_name, shape):
                 print('W_cpu.reshape(-1)[:20]', W_cpu.reshape(-1)[:20])
                 print('W_gpu.reshape(-1)[:20]', W_gpu.reshape(-1)[:20])
             assert np.all(np.abs(W_cpu - W_gpu) < 1e-4)
+
+            tl = timeline.Timeline(run_metadata.step_stats)
+            ctf = tl.generate_chrome_trace_format()
+            with open('{}_timeline.json'.format(func_name), 'w') as f:
+                f.write(ctf)
 
 
 @pytest.mark.parametrize(

@@ -81,8 +81,45 @@ void LogMessage::GenerateLogMessage() {
 }
 #endif
 
+namespace {
+
+// Parse log level (int64) from environment variable (char*)
+int64 LogLevelStrToInt(const char* tf_env_var_val) {
+  if (tf_env_var_val == nullptr) {
+    return 0;
+  }
+
+  // Ideally we would use env_var / safe_strto64, but it is
+  // hard to use here without pulling in a lot of dependencies,
+  // so we use std:istringstream instead
+  string min_log_level(tf_env_var_val);
+  std::istringstream ss(min_log_level);
+  int64 level;
+  if (!(ss >> level)) {
+    // Invalid vlog level setting, set level to default (0)
+    level = 0;
+  }
+
+  return level;
+}
+
+}  // namespace
+
+int64 MinLogLevelFromEnv() {
+  const char* tf_env_var_val = getenv("TF_CPP_MIN_LOG_LEVEL");
+  return LogLevelStrToInt(tf_env_var_val);
+}
+
+int64 MinVLogLevelFromEnv() {
+  const char* tf_env_var_val = getenv("TF_CPP_MIN_VLOG_LEVEL");
+  return LogLevelStrToInt(tf_env_var_val);
+}
 LogMessage::~LogMessage() { GenerateLogMessage(); }
 
+int64 LogMessage::MinVLogLevel() {
+  static int64 min_vlog_level = MinVLogLevelFromEnv();
+  return min_vlog_level;
+}
 LogMessageFatal::LogMessageFatal(const char* file, int line)
     : LogMessage(file, line, FATAL) {}
 LogMessageFatal::~LogMessageFatal() {
